@@ -8,10 +8,15 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/${_APP_NAME}:${SHORT_SHA}']
     # deploy container image to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['beta', 'run', 'deploy', '${_APP_NAME}-${_APP_ENV}-${_APP_VERSION}-${_APP_REGION_SHORTCODE}', '--image', 'gcr.io/$PROJECT_ID/${_APP_NAME}:${SHORT_SHA}', '--region', '${_APP_REGION}', '--allow-unauthenticated', '--platform', 'managed']
+    args: ['run', 'deploy', '${_APP_NAME}-${_APP_ENV}-${_APP_VERSION}-${_APP_REGION_SHORTCODE}', '--image', 'gcr.io/$PROJECT_ID/${_APP_NAME}:${SHORT_SHA}', '--region', '${_APP_REGION}', '--allow-unauthenticated', '--platform', 'managed']
     env:
       - 'PORT=8080'
       - 'APP_ENV=${BRANCH_NAME}'
       - 'APP_REGION=${_APP_REGION}'
+substitutions:
+  _APP_NAME: 'nestjs-starter-demo'
+  _APP_ENV: 'dev'
+  _APP_REGION: 'europe-west4'
+  _APP_REGION_SHORTCODE: 'eu'
 images:
   - gcr.io/$PROJECT_ID/${_APP_NAME}
