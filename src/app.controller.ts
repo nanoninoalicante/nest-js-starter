@@ -3,8 +3,9 @@ import { AppService } from "./app.service";
 import { ErrorsInterceptor } from "./interceptors/exception.interceptor";
 import { LoggingInterceptor } from "./interceptors/logging.interceptor";
 import { ResponseInterceptor } from "./interceptors/response.interceptor";
+
 @UseInterceptors(new LoggingInterceptor())
-@UseInterceptors(new ResponseInterceptor())
+// @UseInterceptors(new ResponseInterceptor())
 @UseInterceptors(new ErrorsInterceptor())
 @Controller()
 export class AppController {
