@@ -1,4 +1,4 @@
-import { Controller, Get, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, Res, UseInterceptors } from "@nestjs/common";
 import { AppService } from "./app.service";
 import { ErrorsInterceptor } from "./interceptors/exception.interceptor";
 import { LoggingInterceptor } from "./interceptors/logging.interceptor";
@@ -11,7 +11,10 @@ export class AppController {
     constructor(private readonly appService: AppService) {}
 
     @Get()
-    getHello(): string {
-        return this.appService.getHello();
+    async getHtml(@Res() res: any) {
+        res.set("Content-Type", "text/html; charset=utf-8");
+        return res.send(
+            "<!DOCTYPE html><html><body><h1>Hello World</h1></body></html>",
+        );
     }
 }
