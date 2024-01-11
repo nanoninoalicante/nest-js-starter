@@ -12,9 +12,20 @@ export class AppController {
 
     @Get()
     async getHtml(@Res() res: any) {
+        const htmlString = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hello World</title>
+    </head>
+    <body>
+        <h1>Hello World</h1>
+    </body>
+    </html>
+    `;
         res.set("Content-Type", "text/html; charset=utf-8");
-        return res.send(
-            "<!DOCTYPE html><html><body><h1>Hello World</h1></body></html>",
-        );
+        return res.send(htmlString);
     }
 }
