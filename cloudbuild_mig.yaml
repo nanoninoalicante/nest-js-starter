@@ -12,8 +12,12 @@ steps:
            '--container-image=gcr.io/$PROJECT_ID/${_APP_NAME}:$SHORT_SHA',
            '--machine-type=e2-medium',  # specify the machine type
            '--region=${_APP_REGION}',       # specify the region
+           '--tags=http-server',       # specify the tags
+           '--boot-disk-size=20GB',    # specify the boot disk size
+           '--boot-disk-type=pd-ssd',  # specify the boot disk type
+
            # Add other necessary flags like --network, --subnet, etc.
-          ]
+           ]
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['compute', 'instance-groups', 'managed', 'rolling-action', 'start-update', '${_INSTANCE_GROUP}',
            '--version', 'template=template-name-$SHORT_SHA', '--zone=${_ZONE}']
