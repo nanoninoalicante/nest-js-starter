@@ -3,6 +3,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { HelloModule } from "./hello/hello.module";
 import { ConfigModule } from "@nestjs/config";
+import { MysqlModule } from './mysql/mysql.module';
 
 @Module({
     imports: [
@@ -11,6 +12,7 @@ import { ConfigModule } from "@nestjs/config";
             isGlobal: true,
             cache: false,
         }),
+        MysqlModule,
     ],
     controllers: [AppController],
     providers: [AppService],
