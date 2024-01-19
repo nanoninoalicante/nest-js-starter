@@ -26,5 +26,7 @@ COPY . .
 ENV NODE_OPTIONS=--max_old_space_size=2048
 # Build
 RUN npm run build
+
+EXPOSE 8080
 # Start the service
 CMD npm run start:prod
