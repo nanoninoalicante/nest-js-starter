@@ -15,4 +15,14 @@ export class HelloService {
             throw error;
         }
     }
+    async sendTestRequest(url: string, data: any) {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        return { url, data, response: await response.json() };
+    }
 }
