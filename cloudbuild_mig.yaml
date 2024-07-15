@@ -1,6 +1,6 @@
 steps:
   # - name: 'gcr.io/cloud-builders/gsutil'
-  #   args: ['cp', 'gs://${PROJECT_ID}-envvars/${_APP_NAME}-${_APP_ENV}/gservice-account.json', 'gservice-account.json']
+  #   args: ['cp', 'gs://${PROJECT_ID}-envvars/${_APP_NAME}-${_APP_ENV}/.env', '.env']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/${_APP_NAME}:${SHORT_SHA}', '.', '--build-arg', 'COMMIT_ID=${SHORT_SHA}', '--build-arg', 'BRANCH_NAME=${BRANCH_NAME}', '--build-arg', 'VERSION=${_APP_VERSION}', '--build-arg', 'REGION=${_APP_REGION}']
     # push the container image to Container Registry
@@ -8,25 +8,27 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/${_APP_NAME}:${SHORT_SHA}']
     # deploy container image to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['compute', 'instance-templates', 'create-with-container', 'template-name-$SHORT_SHA',
+    args: ['compute', 'instance-templates', 'create-with-container', 'template-${BUILD_ID}-${SHORT_SHA}',
            '--container-image=gcr.io/$PROJECT_ID/${_APP_NAME}:$SHORT_SHA',
-           '--machine-type=e2-medium',  # specify the machine type
+           '--machine-type=${_MACHINE_TYPE}',  # specify the machine type
            '--region=${_APP_REGION}',       # specify the region
-           '--tags=http-server',       # specify the tags
-           '--boot-disk-size=20GB',    # specify the boot disk size
+           '--boot-disk-size=${_DISK_SIZE}',    # specify the boot disk size
            '--boot-disk-type=pd-ssd',  # specify the boot disk type
-
+           '--metadata=google-monitoring-enabled=true',
+           '--scopes=cloud-platform,logging-write,monitoring-write,storage-full,service-control,service-management,pubsub'
            # Add other necessary flags like --network, --subnet, etc.
            ]
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['compute', 'instance-groups', 'managed', 'rolling-action', 'start-update', '${_INSTANCE_GROUP}',
-           '--version', 'template=template-name-$SHORT_SHA', '--zone=${_ZONE}']
+           '--version', 'template=template-${BUILD_ID}-${SHORT_SHA}', '--zone=${_ZONE}']
 substitutions:
-  _APP_NAME: 'nestjs-starter-demo-mig'
+  _APP_NAME: 'nestjs-starterapi-api-gce'
   _APP_ENV: 'dev'
-  _APP_REGION: 'us-east4'
+  _APP_REGION: 'us-east1'
   _APP_REGION_SHORTCODE: 'us'
-  _INSTANCE_GROUP: 'nestjs-starter-test'
-  _ZONE: 'us-east4-c'
+  _INSTANCE_GROUP: 'nestjs-starterapi-api-dev-mig-us-east1'
+  _ZONE: 'us-east1-c'
+  _MACHINE_TYPE: 'e2-custom-2-2048'
+  _DISK_SIZE: '30'
 images:
   - gcr.io/$PROJECT_ID/${_APP_NAME}
