@@ -26,9 +26,9 @@ substitutions:
   _APP_ENV: 'dev'
   _APP_REGION: 'us-east1'
   _APP_REGION_SHORTCODE: 'us'
-  _INSTANCE_GROUP: 'tonto-audiomanagement-api-prod-mig-us-east1'
-  _ZONE: 'us-east1-c'
+  _INSTANCE_GROUP: 'nestjs-starter-api-mig-demo'
+  _ZONE: 'us-east1-b'
   _MACHINE_TYPE: 'e2-custom-2-2048'
-  _DISK_SIZE: '35'
+  _DISK_SIZE: '20'
 images:
   - gcr.io/$PROJECT_ID/${_APP_NAME}
